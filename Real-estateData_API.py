@@ -1,7 +1,8 @@
 import pandas as pd
 import json
 import requests
-from pandas.io.json import json_normalize  # Import json_normalize
+import numpy as np
+from pandas import json_normalize  # Import json_normalize from the correct module
 
 url = "https://realty-in-au.p.rapidapi.com/properties/list"
 
@@ -30,4 +31,4 @@ for tier in tiered_results:
 
 # Flatten the nested dictionaries in the 'generalFeatures' column
 df = json_normalize(results, sep='_')
-print(df)
+
