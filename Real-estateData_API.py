@@ -9,34 +9,30 @@ url = "https://realty-in-au.p.rapidapi.com/properties/list"
 querystring = {"channel":"buy",
                "searchLocation":"Willetton, WA 6155",
                "searchLocationSubtext":"Region",
-               "type":"region","page":"1",
+               "type":"region",
+               "page":"1",
                "pageSize":"30",
                "sortType":"relevance",
-               "surroundingSuburbs":"true",
+               "surroundingSuburbs":"False",
                "ex-under-contract":"true"}
+
 headers = {
     "X-RapidAPI-Key": "db5ad576ddmsh6a06fb52f495a97p161174jsnd62ba1e007f8",
     "X-RapidAPI-Host": "realty-in-au.p.rapidapi.com"
 }
 
-response = requests.get(url, headers=headers, params=querystring)
-
-def jprint(obj):
-    text = json.dumps(obj, sort_keys=True, indent=4)
-    print(text)
-
-# Uncomment the line below if you want to print the JSON response
-# jprint(response.json())
-
-# Load the JSON data into a Pandas DataFrame
-data = response.json()
-tiered_results = data['tieredResults']
 results = []
-for tier in tiered_results:
-    results.extend(tier['results'])
+for page in range(1, 10):  # change 6 to the maximum number of pages you want to retrieve
+    querystring['page'] = str(page)  # update the page parameter
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    tiered_results = data['tieredResults']
+    for tier in tiered_results:
+        results.extend(tier['results'])
 
 # Flatten the nested dictionaries in the 'generalFeatures' column
 df = json_normalize(results, sep='_')
+
 
 # Define list of columns to drop
 columns_to_drop = ['advertising_region', 
