@@ -148,6 +148,7 @@ new_names = {
 }
 # rename the columns using the dictionary
 newdf = newdf.rename(columns=new_names)
+newdf = newdf[newdf['Suburb'] == 'Willetton']
 
 ## -------------this code below is to fix the sale price
 import re
